@@ -1,0 +1,62 @@
+Project Kickoff: Building the Smart Attendance App UI
+Your Mission: To translate the provided UI designs into a fully interactive, high-fidelity Flutter application. The entire app, for both Admin and Employee roles, will be built with complete navigation and state management, but will be powered exclusively by our pre-defined mock data repository.
+Core Architectural Mandate:
+
+UI First: Your goal is a perfect UI. Do not implement any real backend logic.
+State Management: Use Riverpod for all state management.
+Data Source: All data displayed in the app must be fetched from the MockAttendanceRepository through Riverpod Providers. Simulate network latency with Future.delayed in the repository methods.
+Handle States: Your UI must correctly handle loading, data, and empty/error states provided by your FutureProviders. Show a CircularProgressIndicator while data is loading.
+Reusable Widgets: Build any component that appears more than once (e.g., buttons, KPI cards) in the shared_widgets directory. Collaborate when needed on these components.
+
+Instructions for Developer 1: 
+The Admin Experience:
+You are building the complete Admin Control Panel.
+Task: Implement the full Admin user flow with navigation.
+Build the Admin Navigation Shell:
+Create a main AdminScaffold widget that includes the BottomNavigationBar with the four icons: Dashboard, Employees, Reports, and Settings. Tapping these icons must switch the main body of the scaffold between the different screens.
+Flesh out the Dashboard Screen:
+Build the UI pixel-perfect to the "Good Morning, Sarah!" design.
+Fetch mock data for the four KPI Cards (Total Present, Absent, etc.) and display it.
+Create a Live Status Feed that displays a scrolling list of mock AttendanceRecord objects.
+Implement the Attendance Overview donut chart. Use a library like fl_chart and feed it mock percentage data.
+Build the Reports & Analytics Screen:
+Implement the UI from the design, including the filter buttons (This Week, Last Month, etc.).
+Use the charting library to display the Attendance Trends bar graph using mock data.
+Populate the Employee Summary list with hardcoded summary data.
+The "Export as PDF / CSV" button should be present but have no action for now.
+Implement the Employee Management Flow:
+Create a screen that displays a list of mock employee data.
+Implement the page slide navigation: tapping a Floating Action Button (+) on this screen should navigate to a new, empty "Add Employee" form screen.
+Create the Request Management Screen:
+Use a TabBar to create two tabs: "Leave Requests" and "Correction Requests."
+Populate both tabs with lists of mock request data. Each item in the list should have UI buttons for "Approve" and "Deny."
+Your "Definition of Done":
+You can navigate through all admin screens using the bottom navigation bar. All charts and lists are populated with mock data, and all buttons meant for navigation take you to the correct, fully-built page.
+
+Instructions for Developer 2: 
+The Employee Experience:
+You are building the complete Employee Self-Service Portal.
+Task: Implement the full Employee user flow with navigation.
+Implement the Authentication Flow:
+Build the UI for the main Login Screen.
+Create a placeholder Registration Screen that the admin would hypothetically link to.
+A successful "Login" button press should navigate the user into the main employee app.
+Build the Employee Navigation Shell:
+Create a main EmployeeScaffold widget that includes the BottomNavigationBar with the three icons: Home, Calendar, and Profile. Tapping these icons must switch the body of the scaffold.
+Flesh out the Home Screen:
+Build the UI pixel-perfect to the "Welcome, Alex!" design.
+Use a Riverpod provider to fetch the user's mock currentStatus and todaysActivity and display them in the status banner and timeline.
+Implement the page slide navigation:
+"View My Attendance Calendar" button navigates to the Calendar screen.
+"Request Correction" button navigates to a new form screen.
+(Add a third "Request Leave" button that navigates to the leave form).
+Build the Attendance Calendar Screen:
+Use a calendar package (e.g., table_calendar).
+Fetch mock monthly attendance data.
+Write the logic to color-code the days of the calendar based on the status from the mock data (Present, Absent, Leave).
+Tapping on a day should display the detailed mock IN/OUT times in the card at the bottom.
+Implement the Forms & Profile Screens:
+Build the full UI for the Request Leave and Request Correction forms.
+Build the Profile Screen, which should include a section that displays a static list of "My Requests" and their statuses.
+Your "Definition of Done":
+A user can log in, be taken to the Home screen, and navigate to all other employee screens (Calendar, Profile, Forms) using the provided buttons and navigation bar. All data displayed is from the mock repository, and the calendar is fully interactive and correctly color-coded.
