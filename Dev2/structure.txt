@@ -1,0 +1,126 @@
+lib/
+├── core/                         # Core app functionalities, constants, theming, routing
+│   ├── constants/                # Global constants (e.g., API keys, magic numbers)
+│   ├── routes/                   # App-wide navigation routes (GoRouter setup, etc.)
+│   ├── theme/                    # App-wide theme definitions (colors, text styles)
+│   │   ├── app_colors.dart
+│   │   └── app_text_styles.dart
+│   └── utils/                    # Utility functions (date formatters, validators)
+│       └── app_validators.dart
+│
+├── data/                         # Data layer: Models, Repositories, Providers, Mock data
+│   ├── models/                   # Data structures for your entities (JSON <=> Dart)
+│   │   ├── attendance_record_model.dart
+│   │   ├── employee_model.dart
+│   │   ├── leave_request_model.dart
+│   │   └── user_model.dart       # For Auth, defining admin/employee roles
+│   │
+│   ├── providers/                # Riverpod Providers that expose repositories/data streams
+│   │   ├── auth_provider.dart
+│   │   ├── attendance_provider.dart
+│   │   ├── employee_provider.dart
+│   │   └── request_provider.dart
+│   │
+│   ├── repositories/             # Interface and implementations for data fetching
+│   │   ├── auth_repository.dart        # Abstract (contract)
+│   │   ├── attendance_repository.dart  # Abstract (contract)
+│   │   ├── employee_repository.dart    # Abstract (contract)
+│   │   ├── request_repository.dart     # Abstract (contract)
+│   │   │
+│   │   ├── mock_auth_repository.dart        # Mock implementation for UI-first auth
+│   │   ├── mock_attendance_repository.dart  # Mock implementation for UI-first data
+│   │   ├── mock_employee_repository.dart    # Mock implementation for UI-first employee management
+│   │   └── mock_request_repository.dart     # Mock implementation for UI-first request management
+│   │
+│   └── mock_data.dart            # Centralized file for hardcoded mock data for all repositories
+│
+├── features/                     # Feature-specific modules, each containing its own screens, widgets, and business logic
+│   ├── admin_auth/               # Developer 2 (Login/Registration screens primarily)
+│   │   ├── presentation/
+│   │   │   ├── screens/
+│   │   │   │   ├── login_screen.dart
+│   │   │   │   └── registration_screen.dart
+│   │   │   └── widgets/          # Widgets specific to auth (e.g., password input field)
+│   │   └── application/          # State not directly tied to data fetching (e.g., form validation logic)
+│   │
+│   ├── admin_dashboard/          # Developer 1
+│   │   ├── presentation/
+│   │   │   ├── screens/
+│   │   │   │   └── admin_dashboard_screen.dart
+│   │   │   └── widgets/          # Widgets specific to admin dashboard (e.g., LiveStatusTile)
+│   │   └── application/
+│   │
+│   ├── admin_employee_management/ # Developer 1 (EmployeeList, AddEmployee)
+│   │   ├── presentation/
+│   │   │   ├── screens/
+│   │   │   │   ├── employee_list_screen.dart
+│   │   │   │   └── add_employee_screen.dart
+│   │   │   └── widgets/
+│   │   └── application/
+│   │
+│   ├── admin_request_management/ # Developer 1 (Manage Requests, Leave/Correction tabs)
+│   │   ├── presentation/
+│   │   │   ├── screens/
+│   │   │   │   └── request_management_screen.dart
+│   │   │   └── widgets/
+│   │   └── application/
+│   │
+│   ├── admin_reports/            # Developer 1
+│   │   ├── presentation/
+│   │   │   ├── screens/
+│   │   │   │   └── reports_analytics_screen.dart
+│   │   │   └── widgets/
+│   │   └── application/
+│   │
+│   ├── admin_settings/           # Developer 1
+│   │   ├── presentation/
+│   │   │   ├── screens/
+│   │   │   │   └── admin_settings_screen.dart
+│   │   │   └── widgets/
+│   │   └── application/
+│   │
+│   ├── employee_dashboard/       # Developer 2
+│   │   ├── presentation/
+│   │   │   ├── screens/
+│   │   │   │   └── employee_home_screen.dart
+│   │   │   └── widgets/          # Widgets specific to employee dashboard (e.g., ActivityTimeline)
+│   │   └── application/
+│   │
+│   ├── employee_attendance_calendar/ # Developer 2
+│   │   ├── presentation/
+│   │   │   ├── screens/
+│   │   │   │   └── attendance_calendar_screen.dart
+│   │   │   └── widgets/
+│   │   └── application/
+│   │
+│   ├── employee_requests/        # Developer 2 (Request Correction/Leave forms, My Requests list)
+│   │   ├── presentation/
+│   │   │   ├── screens/
+│   │   │   │   ├── request_correction_screen.dart
+│   │   │   │   └── request_leave_screen.dart
+│   │   │   └── widgets/
+│   │   └── application/
+│   │
+│   ├── employee_profile/         # Developer 2
+│   │   ├── presentation/
+│   │   │   ├── screens/
+│   │   │   │   └── my_profile_screen.dart
+│   │   │   └── widgets/
+│   │   └── application/
+│   │
+│   └── shared_app_shell/         # For the common Scaffold structure and bottom navigation
+│       ├── presentation/
+│       │   ├── widgets/
+│       │   │   ├── admin_bottom_nav_bar.dart
+│       │   │   └── employee_bottom_nav_bar.dart
+│       │   └── screens/
+│       │       ├── admin_app_shell.dart   # The main scaffold for Admin
+│       │       └── employee_app_shell.dart # The main scaffold for Employee
+│       └── application/
+│
+├── shared_widgets/               # Generic, highly reusable UI components (buttons, text fields, cards)
+│   ├── app_buttons.dart
+│   ├── kpi_card.dart
+│   └── custom_app_bar.dart
+│
+└── main.dart                     # Entry point of the application
