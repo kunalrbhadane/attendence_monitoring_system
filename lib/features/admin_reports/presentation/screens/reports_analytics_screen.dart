@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-// CORRECTED IMPORTS
 import 'package:attendence_monitoring_system/core/theme/app_colors.dart';
 import 'package:attendence_monitoring_system/core/theme/app_text_styles.dart';
 import 'package:attendence_monitoring_system/shared_widgets/primary_button.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-// Custom widget for the filter buttons
+// Note for developers: In a larger project, helper widgets like FilterChipButton
+// and EmployeeSummaryTile would be moved to a dedicated 'widgets' sub-folder
+// within 'admin_reports/presentation/'.
+
+/// A custom selectable chip button used for filtering.
 class FilterChipButton extends StatelessWidget {
   final String text;
   final bool isSelected;
@@ -39,8 +42,7 @@ class FilterChipButton extends StatelessWidget {
   }
 }
 
-
-// Custom widget for an item in the employee summary list
+/// A custom list tile to display a summary of an employee's attendance.
 class EmployeeSummaryTile extends StatelessWidget {
   const EmployeeSummaryTile({super.key});
 
@@ -65,7 +67,7 @@ class EmployeeSummaryTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Jane Smith", style: AppTextStyles.bodyBold),
-                Text("09:02 AM", style: AppTextStyles.caption),
+                Text("Last Clock-In: 09:02 AM", style: AppTextStyles.caption),
               ],
             ),
           ),
@@ -83,6 +85,8 @@ class EmployeeSummaryTile extends StatelessWidget {
   }
 }
 
+
+/// The main screen for viewing attendance reports and analytics.
 class ReportsAnalyticsScreen extends StatefulWidget {
   const ReportsAnalyticsScreen({super.key});
 
@@ -91,6 +95,7 @@ class ReportsAnalyticsScreen extends StatefulWidget {
 }
 
 class _ReportsAnalyticsScreenState extends State<ReportsAnalyticsScreen> {
+  // State to manage which filter button is currently active
   int _selectedFilterIndex = 0;
   
   @override
@@ -104,12 +109,14 @@ class _ReportsAnalyticsScreenState extends State<ReportsAnalyticsScreen> {
         scrolledUnderElevation: 0,
         iconTheme: const IconThemeData(color: AppColors.textPrimary),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      // The body is a Padding widget with a Column.
+      // This Column is NOT wrapped in a scroll view, making the layout fixed.
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // --- Filter Buttons ---
+            // --- Filter Buttons Section ---
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -120,62 +127,72 @@ class _ReportsAnalyticsScreenState extends State<ReportsAnalyticsScreen> {
             ),
             const SizedBox(height: 24),
             
-            // --- Attendance Trends Chart ---
+            // --- Attendance Trends Chart Section ---
             Text("Attendance Trends", style: AppTextStyles.bodyBold),
             const SizedBox(height: 16),
-            Container(
-              height: 200,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: BarChart(
-                BarChartData(
-                  alignment: BarChartAlignment.spaceAround,
-                  barGroups: _getMockBarGroups(),
-                  titlesData: FlTitlesData(
-                    show: true,
-                    topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) => Text('${value.toInt()}%', style: AppTextStyles.caption),
-                        reservedSize: 28,
-                        interval: 1,
-                      ),
-                    ),
-                    bottomTitles: AxisTitles(
-                       sideTitles: SideTitles(
+            // Flexible widget makes the chart container expand to take up a
+            // proportional amount of the available vertical space.
+            Flexible(
+              flex: 3, // Adjust flex factor for desired height proportion
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(16)),
+                child: BarChart(
+                  BarChartData(
+                    alignment: BarChartAlignment.spaceAround,
+                    barGroups: _getMockBarGroups(),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
                           showTitles: true,
-                          getTitlesWidget: (value, meta) {
-                             String text = '';
-                             switch (value.toInt()) {
-                                case 0: text = 'Oct 1-3'; break;
-                                case 2: text = 'Oct 1-24'; break;
-                                case 4: text = 'Oct 1-21'; break;
-                                case 6: text = 'Oct 1-31'; break;
-                             }
-                             return SideTitleWidget(axisSide: meta.axisSide, child: Text(text, style: AppTextStyles.caption));
-                          }
-                       ),
-                    )
+                          getTitlesWidget: (value, meta) => Text('${value.toInt()}%', style: AppTextStyles.caption),
+                          reservedSize: 32, // More space for labels
+                          interval: 1,
+                        ),
+                      ),
+                      bottomTitles: AxisTitles(
+                         sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 22,
+                            getTitlesWidget: (value, meta) {
+                               String text = '';
+                               switch (value.toInt()) {
+                                 case 0: text = 'Oct 1-3'; break;
+                                 case 2: text = 'Oct 1-24'; break;
+                                 case 4: text = 'Oct 1-21'; break;
+                                 case 6: text = 'Oct 1-31'; break;
+                               }
+                               return SideTitleWidget(axisSide: meta.axisSide, child: Text(text, style: AppTextStyles.caption));
+                            }
+                         ),
+                      )
+                    ),
+                    borderData: FlBorderData(show: false),
+                    gridData: const FlGridData(show: false),
                   ),
-                  borderData: FlBorderData(show: false),
-                  gridData: const FlGridData(show: false),
                 ),
               ),
             ),
             const SizedBox(height: 24),
             
-            // --- Employee Summary List ---
+            // --- Employee Summary List Section ---
             Text("Employee Summary", style: AppTextStyles.bodyBold),
             const SizedBox(height: 16),
-            const EmployeeSummaryTile(),
-            const EmployeeSummaryTile(),
-            const EmployeeSummaryTile(),
-
+            // This Flexible widget takes the remaining vertical space for the list.
+            Flexible(
+              flex: 4, // Given more proportional space than the chart
+              child: ListView( // The ListView itself can scroll if content overflows the Flexible container
+                padding: EdgeInsets.zero,
+                children: const [
+                  EmployeeSummaryTile(),
+                  EmployeeSummaryTile(),
+                  EmployeeSummaryTile(),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -193,23 +210,29 @@ class _ReportsAnalyticsScreenState extends State<ReportsAnalyticsScreen> {
     );
   }
 
-  // Mock data for the bar chart
+  /// Generates mock data for the bar chart.
   List<BarChartGroupData> _getMockBarGroups() {
     return List.generate(7, (index) {
       return BarChartGroupData(
         x: index,
         barRods: [
           BarChartRodData(
-            toY: (index * 2 % 3 + 1).toDouble(),
+            toY: (index * 2 % 3 + 1).toDouble(), // Some random-looking height
             color: AppColors.primaryBlue,
             width: 15,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(4),
+              topRight: Radius.circular(4)
+            ),
           ),
            BarChartRodData(
-            toY: (index * 2 % 3 + 1.5).toDouble(),
+            toY: (index * 2 % 3 + 1.5).toDouble(), // Some random-looking height
             color: AppColors.secondaryOrange,
             width: 15,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(4),
+              topRight: Radius.circular(4)
+            ),
           ),
         ],
       );
