@@ -2,28 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:attendence_monitoring_system/core/theme/app_colors.dart';
 import 'package:attendence_monitoring_system/core/theme/app_text_styles.dart';
 
-// Custom widget for a request item in the list
 class RequestListTile extends StatelessWidget {
   final String name;
   final String date;
   final String reason;
-  const RequestListTile({super.key, required this.name, required this.date, required this.reason});
+  final String type;
+
+  // MODIFIED: Removed const
+  const RequestListTile({
+    super.key,
+    required this.name,
+    required this.date,
+    required this.reason,
+    required this.type,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    final theme = Theme.of(context);
+    return Card( // Card now uses theme defaults
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 1.5,
-      shadowColor: AppColors.background,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const CircleAvatar(
-              backgroundColor: AppColors.border,
-              child: Icon(Icons.person, color: AppColors.textSecondary),
+            CircleAvatar(
+              radius: 24,
+              backgroundColor: theme.colorScheme.background,
+              child: Icon(Icons.person, size: 28, color: theme.colorScheme.onSurface.withOpacity(0.6)),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -32,20 +39,22 @@ class RequestListTile extends StatelessWidget {
                 children: [
                   Text(name, style: AppTextStyles.bodyBold),
                   const SizedBox(height: 4),
+                  Text("Type: $type", style: AppTextStyles.caption),
                   Text("Date: $date", style: AppTextStyles.caption),
-                  Text("Reason: $reason", style: AppTextStyles.caption, overflow: TextOverflow.ellipsis),
+                  Text("Reason: $reason", style: AppTextStyles.caption.copyWith(color: AppColors.primaryBlue), overflow: TextOverflow.ellipsis, maxLines: 1),
                 ],
               ),
             ),
             const SizedBox(width: 8),
             TextButton(
-              onPressed: () {},
+              onPressed: () { /* ... */ },
               style: TextButton.styleFrom(
-                foregroundColor: AppColors.textSecondary,
-                backgroundColor: AppColors.border.withOpacity(0.5)
+                foregroundColor: AppColors.statusRed,
+                backgroundColor: AppColors.statusRed.withOpacity(0.1),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
               child: const Text('Deny'),
-            )
+            ),
           ],
         ),
       ),
@@ -53,8 +62,8 @@ class RequestListTile extends StatelessWidget {
   }
 }
 
-
 class RequestManagementScreen extends StatelessWidget {
+  // MODIFIED: Removed const
   const RequestManagementScreen({super.key});
 
   @override
@@ -62,17 +71,15 @@ class RequestManagementScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: AppColors.background,
         appBar: AppBar(
-          title: Text("Request Management", style: AppTextStyles.heading2),
-          backgroundColor: AppColors.background,
-          elevation: 0,
-          scrolledUnderElevation: 0,
+          title: const Text("Request Management"),
           bottom: TabBar(
-            indicatorColor: AppColors.primaryBlue,
-            labelColor: AppColors.primaryBlue,
-            unselectedLabelColor: AppColors.textSecondary,
+            // TabBar indicator color now uses theme's primary color
+            indicatorColor: Theme.of(context).colorScheme.primary,
+            labelColor: Theme.of(context).colorScheme.primary,
+            unselectedLabelColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
             labelStyle: AppTextStyles.bodyBold,
+            indicatorSize: TabBarIndicatorSize.tab,
             tabs: const [
               Tab(text: "Leave Requests"),
               Tab(text: "Correction Requests"),
@@ -83,19 +90,15 @@ class RequestManagementScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
           child: TabBarView(
             children: [
-              // --- Leave Requests Tab ---
               ListView(
                 children: const [
-                   RequestListTile(name: 'Jane Smith', date: 'Oct 20-22', reason: 'Family vacation trip...'),
-                   RequestListTile(name: 'John Doe', date: 'Nov 01-02', reason: 'Personal leave'),
-                   RequestListTile(name: 'Alex Chen', date: 'Oct 25', reason: 'Medical appointment'),
+                   RequestListTile(name: 'Jane Smith', type: 'Casual Leave', date: 'Oct 20-22', reason: 'Family vacation trip...'),
+                   RequestListTile(name: 'John Doe', type: 'Paid Leave', date: 'Nov 01-02', reason: 'Personal leave'),
                 ],
               ),
-              // --- Correction Requests Tab ---
               ListView(
                 children: const [
-                  RequestListTile(name: 'Rey Tave', date: 'Oct 26', reason: 'Forgot to clock out'),
-                  RequestListTile(name: 'Jane Smith', date: 'Oct 25', reason: 'Clocked in late due to traffic'),
+                  RequestListTile(name: 'Rey Tave', type: 'Missed Punch', date: 'Oct 26', reason: 'Forgot to clock out yesterday'),
                 ],
               )
             ],
