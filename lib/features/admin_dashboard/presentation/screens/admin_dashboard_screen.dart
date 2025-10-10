@@ -7,14 +7,13 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 
 // --- WIDGETS ---
-// These helper widgets are self-contained, theme-aware, and pixel-perfect.
+// These helper widgets are self-contained and pixel-perfect.
 
 class KpiCard extends StatelessWidget {
   final String title;
   final String value;
   final Widget icon;
-
-  KpiCard({super.key, required this.title, required this.value, required this.icon});
+  const KpiCard({super.key, required this.title, required this.value, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +33,7 @@ class KpiCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Flexible(
-                child: Text(
-                  value,
-                  style: AppTextStyles.heading1.copyWith(fontSize: 24, height: 1.0),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ),
+              Flexible(child: Text(value, style: AppTextStyles.heading1.copyWith(fontSize: 24, height: 1.0), overflow: TextOverflow.ellipsis, maxLines: 1)),
               const SizedBox(width: 4),
               icon,
             ],
@@ -56,8 +48,7 @@ class LiveStatusTile extends StatelessWidget {
   final String name;
   final String time;
   final bool isIn;
-
-  LiveStatusTile({super.key, required this.name, required this.time, required this.isIn});
+  const LiveStatusTile({super.key, required this.name, required this.time, required this.isIn});
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +79,7 @@ class LiveStatusTile extends StatelessWidget {
             ),
             child: Text(
               isIn ? 'IN' : 'OUT',
-              style: AppTextStyles.caption.copyWith(
-                color: isIn ? AppColors.statusGreen : AppColors.statusRed,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTextStyles.caption.copyWith(color: isIn ? AppColors.statusGreen : AppColors.statusRed, fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -100,7 +88,7 @@ class LiveStatusTile extends StatelessWidget {
   }
 }
 
-/// The final, perfected Admin Dashboard screen with a scrollable Live Status Feed.
+/// The final, perfected Admin Dashboard screen with all layout fixes.
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
 
@@ -163,11 +151,9 @@ class AdminDashboardScreen extends StatelessWidget {
                         children: [
                           Text('Live Status Feed', style: AppTextStyles.bodyBold),
                           const SizedBox(height: 8),
-                          // MODIFIED: The list of tiles is now wrapped in an Expanded
-                          // widget and a ListView to make it scrollable.
                           Expanded(
                             child: ListView(
-                              padding: EdgeInsets.zero, // Remove any default padding
+                              padding: EdgeInsets.zero,
                               children: [
                                 LiveStatusTile(name: 'John Doe', time: '09:25 AM', isIn: true),
                                 LiveStatusTile(name: 'Jane Smith', time: '09:20 AM', isIn: true),
@@ -175,7 +161,6 @@ class AdminDashboardScreen extends StatelessWidget {
                                 LiveStatusTile(name: 'Maria Garcia', time: '09:15 AM', isIn: false),
                                 LiveStatusTile(name: 'David Lee', time: '09:12 AM', isIn: true),
                                 LiveStatusTile(name: 'Emily Ray', time: '09:10 AM', isIn: true),
-                                LiveStatusTile(name: 'Kevin Hart', time: '09:05 AM', isIn: true),
                               ],
                             ),
                           ),
@@ -198,6 +183,7 @@ class AdminDashboardScreen extends StatelessWidget {
     );
   }
 
+  /// Helper widget for the right-side overview card, with the perfected button layout.
   Widget _buildAttendanceOverview(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -206,7 +192,7 @@ class AdminDashboardScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Attendance Overview', style: AppTextStyles.bodyBold),
-          const Spacer(flex: 2),
+          const Spacer(flex: 3),
           Center(
             child: Stack(
               alignment: Alignment.center,
@@ -221,7 +207,7 @@ class AdminDashboardScreen extends StatelessWidget {
                       startDegreeOffset: -90,
                       sections: [
                         PieChartSectionData(color: AppColors.primaryBlue, value: 88, title: '', radius: 20),
-                        PieChartSectionData(color: const Color.fromARGB(255, 164, 13, 88), value: 12, title: '', radius: 20),
+                        PieChartSectionData(color: AppColors.primaryMagenta, value: 12, title: '', radius: 20),
                       ],
                     ),
                   ),
@@ -230,16 +216,34 @@ class AdminDashboardScreen extends StatelessWidget {
               ],
             ),
           ),
-          const Spacer(flex: 3),
+          const Spacer(flex: 4),
           ElevatedButton(
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ReportsAnalyticsScreen())),
-            child: Text('Generate Report', style: AppTextStyles.button.copyWith(fontSize: 14)),
-          ),
-          const SizedBox(height: 8),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryDarkBlue),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryDarkBlue,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            ),
             onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RequestManagementScreen())),
-            child: Text('Manage Requests', style: AppTextStyles.button.copyWith(fontSize: 14)),
+            // MODIFIED: This is the definitive fix for the text wrapping issue.
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.rule_folder_outlined, size: 20),
+                const SizedBox(width: 8),
+                // Expanded is the key. It allows the Text widget to occupy
+                // all remaining horizontal space in the Row.
+                Expanded(
+                  child: Text(
+                    'Manage Request', // Using the full, professional text
+                    textAlign: TextAlign.center, // Center text, useful if it wraps
+                    style: AppTextStyles.button.copyWith(fontSize: 14), // A clean, readable font size
+                    // softWrap and overflow are good for extreme cases but may not be needed now
+                    softWrap: true, 
+                    overflow: TextOverflow.fade,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:attendence_monitoring_system/core/theme/app_colors.dart';
 import 'package:attendence_monitoring_system/features/admin_auth/presentation/screens/login_screen.dart';
 import 'package:attendence_monitoring_system/features/admin_settings/presentation/screens/change_password_screen.dart';
 import 'package:attendence_monitoring_system/features/admin_settings/presentation/screens/edit_profile_screen.dart';
-// MODIFIED: Import the new company settings screen
 import 'package:attendence_monitoring_system/features/admin_settings/presentation/screens/company_settings_screen.dart';
 
 
