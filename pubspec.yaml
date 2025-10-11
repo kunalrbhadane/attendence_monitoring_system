@@ -22,8 +22,8 @@ dependencies:
 
   # UI Components
   fl_chart: ^0.68.0 # For building charts and graphs (Reports & Dashboard)
-  table_calendar: ^3.1.2 # For the employee's attendance calendar screen
-  
+  #table_calendar: ^3.1.2 # For the employee's attendance calendar screen
+  table_calendar: ^3.0.9
   # Add any other utilities you might need, e.g., for icons
   # flutter_svg: ^2.0.10+1
 

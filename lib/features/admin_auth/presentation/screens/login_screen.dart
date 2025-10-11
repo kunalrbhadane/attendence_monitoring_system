@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:attendence_monitoring_system/core/theme/app_colors.dart';
 import 'package:attendence_monitoring_system/core/theme/app_text_styles.dart';
-import 'package:attendence_monitoring_system/features/shared_app_shell/presentation/screens/admin_app_shell.dart';
+// CORRECTED: The unused AdminAppShell import has been removed for cleanliness.
+// import 'package:attendence_monitoring_system/features/shared_app_shell/presentation/screens/admin_app_shell.dart';
 import 'package:attendence_monitoring_system/shared_widgets/primary_button.dart';
 import 'package:attendence_monitoring_system/features/admin_auth/presentation/screens/signup_screen.dart';
 import 'package:attendence_monitoring_system/features/admin_auth/presentation/screens/forgot_password_screen.dart';
+
+// MODIFICATION FOR DEV 2: Added import for the EmployeeAppShell.
+import 'package:attendence_monitoring_system/features/shared_app_shell/presentation/screens/employee_app_shell.dart';
 
 
 /// The main Login Screen, now fully functional with form validation and navigation.
@@ -30,10 +34,13 @@ class _LoginScreenState extends State<LoginScreen> {
   void _login() {
     // Check if the form's validation rules pass
     if (_formKey.currentState!.validate()) {
-      // For this UI mock, we bypass actual authentication and go straight to the Admin Shell.
+      // For this UI mock, we bypass actual authentication.
       // pushReplacement prevents the user from navigating back to the login screen.
+
+      // --- MODIFICATION FOR DEV 2 ---
+      // This now navigates to the EmployeeAppShell for your development and testing.
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const AdminAppShell()),
+        MaterialPageRoute(builder: (context) => const EmployeeAppShell()),
       );
     }
   }
