@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:attendence_monitoring_system/core/theme/app_colors.dart';
 import 'package:attendence_monitoring_system/core/theme/app_text_styles.dart';
-// CORRECTED: The unused AdminAppShell import has been removed for cleanliness.
-// import 'package:attendence_monitoring_system/features/shared_app_shell/presentation/screens/admin_app_shell.dart';
 import 'package:attendence_monitoring_system/shared_widgets/primary_button.dart';
 import 'package:attendence_monitoring_system/features/admin_auth/presentation/screens/signup_screen.dart';
 import 'package:attendence_monitoring_system/features/admin_auth/presentation/screens/forgot_password_screen.dart';
-
-// MODIFICATION FOR DEV 2: Added import for the EmployeeAppShell.
+// Note: This still points to EmployeeAppShell for Developer 2's testing.
+// In the final app, this would be determined by the user's role after login.
 import 'package:attendence_monitoring_system/features/shared_app_shell/presentation/screens/employee_app_shell.dart';
 
-
-/// The main Login Screen, now fully functional with form validation and navigation.
+/// The main Login Screen, now with a password visibility toggle.
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -22,7 +19,14 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
+
+  // ======================= THE FIX IS HERE =======================
+  // Corrected the typo from "TextEditing-Controller" to "TextEditingController".
   final _passwordController = TextEditingController();
+  // ================================================================
+  
+  // State variable to manage password visibility.
+  bool _isPasswordObscured = true;
 
   @override
   void dispose() {
@@ -32,13 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
   
   void _login() {
-    // Check if the form's validation rules pass
+    // Check if the form's validation rules pass.
     if (_formKey.currentState!.validate()) {
-      // For this UI mock, we bypass actual authentication.
-      // pushReplacement prevents the user from navigating back to the login screen.
-
-      // --- MODIFICATION FOR DEV 2 ---
-      // This now navigates to the EmployeeAppShell for your development and testing.
+      // For this UI-first mock, we bypass actual authentication.
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const EmployeeAppShell()),
       );
@@ -66,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Icon(Icons.fingerprint, size: 100, color: AppColors.primaryBlue.withAlpha(128)),
                   const SizedBox(height: 40),
 
+                  // --- Email Field (Unchanged) ---
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
@@ -81,21 +82,36 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 20),
 
+                  // --- Password Field with Visibility Toggle ---
                   TextFormField(
                     controller: _passwordController,
+                    obscureText: _isPasswordObscured,
                     decoration: InputDecoration(
                       labelText: 'Password',
                       prefixIcon: const Icon(Icons.lock_outline_rounded),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      // The suffixIcon is an IconButton that toggles the state.
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordObscured ? Icons.visibility_off : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          // Update the state to show/hide the password.
+                          setState(() {
+                            _isPasswordObscured = !_isPasswordObscured;
+                          });
+                        },
+                      ),
                     ),
-                    obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) return 'Please enter your password.';
                       return null;
                     },
                   ),
+
                   const SizedBox(height: 12),
                   
+                  // --- "Forgot Password?" Button ---
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
@@ -107,6 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 20),
                   
+                  // --- Login & Sign Up Buttons (Unchanged) ---
                   PrimaryButton(text: "LOGIN", onPressed: _login),
                   const SizedBox(height: 24),
 

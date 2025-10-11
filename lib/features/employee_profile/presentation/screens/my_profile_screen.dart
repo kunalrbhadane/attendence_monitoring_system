@@ -6,6 +6,9 @@ import 'package:attendence_monitoring_system/core/theme/app_text_styles.dart';
 import 'package:attendence_monitoring_system/data/models/leave_request_model.dart';
 import 'package:attendence_monitoring_system/data/providers/request_provider.dart';
 import 'package:attendence_monitoring_system/features/admin_auth/presentation/screens/login_screen.dart';
+import 'package:attendence_monitoring_system/features/employee_profile/presentation/screens/change_password_screen.dart';
+import 'package:attendence_monitoring_system/features/employee_profile/presentation/screens/edit_profile_screen.dart';
+
 
 /// The main profile screen for the employee.
 /// Displays user information, profile actions, and a list of recent leave requests.
@@ -46,8 +49,8 @@ class MyProfileScreen extends ConsumerWidget {
                   Text("#EID-001", style: AppTextStyles.subtitle.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6)), textAlign: TextAlign.center),
                   const SizedBox(height: 24),
                   
+                  // Functional navigation buttons
                   _buildProfileButton(context, "Edit Personal Info", Icons.edit_outlined),
-                  // The "Change Password" button has been re-added as requested.
                   _buildProfileButton(context, "Change Password", Icons.lock_outline_rounded),
                   
                   // --- ENHANCED: Recent Leave Requests List ---
@@ -95,7 +98,7 @@ class MyProfileScreen extends ConsumerWidget {
     );
   }
 
-  /// Helper for creating styled, tappable list-like buttons for profile actions.
+  /// Helper for creating styled, tappable list-like buttons with functional navigation.
   Widget _buildProfileButton(BuildContext context, String title, IconData icon) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -110,7 +113,16 @@ class MyProfileScreen extends ConsumerWidget {
         title: Text(title, style: AppTextStyles.bodyBold.copyWith(fontSize: 15)),
         trailing: const Icon(Icons.chevron_right, size: 22),
         onTap: () {
-           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$title feature coming soon!")));
+          // Navigate to the correct screen based on the button's title.
+          if (title == "Edit Personal Info") {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const EditProfileScreen())
+            );
+          } else if (title == "Change Password") {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const ChangePasswordScreen())
+            );
+          }
         },
       ),
     );
