@@ -1,12 +1,11 @@
-import 'package:attendence_monitoring_system/data/models/correction_request_model.dart';
 import 'package:attendence_monitoring_system/data/models/leave_request_model.dart';
 
-// The contract for what our request repository can do.
+/// The abstract contract for the request repository.
+/// Defines what methods must be implemented by any data source (mock or real).
+///
+/// By defining this interface, we can easily swap our mock data source
+/// for a real Firebase data source in the future without changing the UI code.
 abstract class RequestRepository {
+  /// Fetches a list of leave requests for a given employee ID.
   Future<List<LeaveRequest>> getLeaveRequestsForEmployee(String employeeId);
-  Future<List<CorrectionRequest>> getCorrectionRequestsForEmployee(String employeeId);
-  
-  // These will be used later when connecting to a real backend.
-  // Future<void> submitLeaveRequest(LeaveRequest request);
-  // Future<void> submitCorrectionRequest(CorrectionRequest request);
 }

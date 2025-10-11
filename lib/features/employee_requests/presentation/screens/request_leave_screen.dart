@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:attendence_monitoring_system/core/theme/app_text_styles.dart';
 import 'package:attendence_monitoring_system/shared_widgets/primary_button.dart';
 
-/// A form for employees to request time off.
+/// A form for employees to request time off (leave).
 class RequestLeaveScreen extends StatefulWidget {
   const RequestLeaveScreen({super.key});
 
@@ -11,6 +11,7 @@ class RequestLeaveScreen extends StatefulWidget {
 }
 
 class _RequestLeaveScreenState extends State<RequestLeaveScreen> {
+  // State to manage the selected leave type.
   String _selectedLeaveType = 'Casual Leave';
 
   @override
@@ -25,10 +26,10 @@ class _RequestLeaveScreenState extends State<RequestLeaveScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Sign in on your account", style: AppTextStyles.subtitle.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6))),
+            Text("Complete the form to submit your request.", style: AppTextStyles.subtitle.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6))),
             const SizedBox(height: 24),
             
-            // Leave Type Dropdown
+            // Leave Type Dropdown menu
             DropdownButtonFormField<String>(
               value: _selectedLeaveType,
               decoration: InputDecoration(
@@ -43,24 +44,23 @@ class _RequestLeaveScreenState extends State<RequestLeaveScreen> {
               }).toList(),
               onChanged: (newValue) {
                 if (newValue != null) {
-                  setState(() {
-                    _selectedLeaveType = newValue;
-                  });
+                  setState(() => _selectedLeaveType = newValue);
                 }
               },
             ),
             const SizedBox(height: 20),
             
-            // Date Pickers
-            _buildDatePicker(context, "Start Date", "20 M Dabre"), // Mock data
+            // Start and End Date Pickers
+            _buildDatePicker(context, "Start Date", "Select Date"),
             const SizedBox(height: 20),
-            _buildDatePicker(context, "End Date", "20 M Dabre"), // Mock data
+            _buildDatePicker(context, "End Date", "Select Date"),
             const SizedBox(height: 20),
 
-            // Reason Text Field
+            // Reason for Leave Text Field
             TextFormField(
               decoration: InputDecoration(
                 labelText: 'Reason for Leave',
+                hintText: 'Explain your reason here...',
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 alignLabelWithHint: true,
               ),
@@ -68,6 +68,7 @@ class _RequestLeaveScreenState extends State<RequestLeaveScreen> {
             ),
             const SizedBox(height: 32),
 
+            // Submit Button
             PrimaryButton(
               text: 'Submit Request', 
               onPressed: () {
@@ -84,11 +85,10 @@ class _RequestLeaveScreenState extends State<RequestLeaveScreen> {
     );
   }
 
+  // Reusable helper widget for date picker fields
   Widget _buildDatePicker(BuildContext context, String label, String value) {
     return InkWell(
-      onTap: () {
-        // TODO: Implement actual date picker logic
-      },
+      onTap: () { /* TODO: Implement actual date picker logic later */ },
       child: InputDecorator(
         decoration: InputDecoration(
           labelText: label,
